@@ -46,6 +46,13 @@ resource "google_cloud_identity_group" "group" {
   }
 
   labels = { for t in var.types : local.label_keys[t] => "" }
+
+  lifecycle {
+    ignore_changes = [
+      # this gets added by google and forces the group to be re-created on apply
+      additional_group_keys,
+    ]
+  }
 }
 
 resource "google_cloud_identity_group_membership" "owners" {
